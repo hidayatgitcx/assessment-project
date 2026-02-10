@@ -1,0 +1,15 @@
+﻿* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Space Grotesk", "Segoe UI", sans-serif;
+  color: #1f1f1f;
+  background: #ffffff;
+}
+
+button,
+input {
+  font: inherit;
+}
