@@ -169,25 +169,10 @@ app.post('/api/auth/reset', async (req, res) => {
 })
 
 app.get('/api/orders', requireAuth, async (req, res) => {
-  const orders = await Order.find({ userId: req.userId })
+  const orders = await Order.find({})
     .select('_id number customer product')
     .sort({ createdAt: -1 })
   return res.json({ orders })
-})
-
-app.post('/api/orders/seed', requireAuth, async (req, res) => {
-  const existing = await Order.find({ userId: req.userId }).limit(1)
-  if (existing.length > 0) {
-    return res.json({ message: 'Orders already exist.' })
-  }
-
-  await Order.insertMany([
-    { number: 101, customer: 'Ava Johnson', product: 'Wireless Headphones', userId: req.userId },
-    { number: 102, customer: 'Noah Carter', product: 'Smart Lamp', userId: req.userId },
-    { number: 103, customer: 'Mia Patel', product: 'Coffee Grinder', userId: req.userId },
-  ])
-
-  return res.json({ message: 'Sample orders created.' })
 })
 
 async function start() {
@@ -198,6 +183,19 @@ async function start() {
 
   await mongoose.connect(process.env.MONGODB_URI)
   console.log('MongoDB connected')
+
+  const sharedOrders = [
+    { number: 101, customer: 'Ava Johnson', product: 'Wireless Headphones' },
+    { number: 102, customer: 'Noah Carter', product: 'Smart Lamp' },
+    { number: 103, customer: 'Mia Patel', product: 'Coffee Grinder' },
+  ]
+  const existingOrders = await Order.countDocuments()
+  const userScopedOrders = await Order.collection.countDocuments({ userId: { $exists: true } })
+  if (existingOrders === 0 || userScopedOrders > 0) {
+    await Order.deleteMany({})
+    await Order.insertMany(sharedOrders)
+    console.log('Seeded shared orders')
+  }
 
   app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`)
