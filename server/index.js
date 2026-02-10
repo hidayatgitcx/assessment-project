@@ -184,19 +184,6 @@ async function start() {
   await mongoose.connect(process.env.MONGODB_URI)
   console.log('MongoDB connected')
 
-  const sharedOrders = [
-    { number: 101, customer: 'Ava Johnson', product: 'Wireless Headphones' },
-    { number: 102, customer: 'Noah Carter', product: 'Smart Lamp' },
-    { number: 103, customer: 'Mia Patel', product: 'Coffee Grinder' },
-  ]
-  const existingOrders = await Order.countDocuments()
-  const userScopedOrders = await Order.collection.countDocuments({ userId: { $exists: true } })
-  if (existingOrders === 0 || userScopedOrders > 0) {
-    await Order.deleteMany({})
-    await Order.insertMany(sharedOrders)
-    console.log('Seeded shared orders')
-  }
-
   app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`)
   })
