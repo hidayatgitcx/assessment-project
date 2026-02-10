@@ -23,7 +23,10 @@ dist-ssr
 *.sln
 *.sw?
 
-
+# Environment files
+.env
+.env.*
+!.env.example
 
 .nx/cache
 .nx/workspace-data
