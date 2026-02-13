@@ -14,12 +14,12 @@ dotenv.config()
 
 const app = express()
 
-const PORT = process.env.PORT || 5000
-const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN || 'http://localhost:5173'
-const JWT_SECRET = process.env.JWT_SECRET || 'dev_secret_change_me'
+const PORT = process.env.PORT
+const CLIENT_ORIGIN = process.env.CLIENT_ORIGIN
+const JWT_SECRET = process.env.JWT_SECRET
 const TOKEN_NAME = 'auth_token'
 const TOKEN_MAX_AGE_MS = 1000 * 60 * 60 * 8
-const RESET_TOKEN_DEV_MODE = (process.env.RESET_TOKEN_DEV_MODE || 'true') === 'true'
+const RESET_TOKEN_DEV_MODE = (process.env.RESET_TOKEN_DEV_MODE) === 'true'
 
 app.use(express.json())
 app.use(cookieParser())

@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 function Dashboard({ user, onSignout }) {
   const [orders, setOrders] = useState([])
